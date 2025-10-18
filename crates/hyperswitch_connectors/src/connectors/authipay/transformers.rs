@@ -47,6 +47,16 @@ pub struct Amount {
     components: Option<AmountComponents>,
 }
 
+impl Amount {
+    pub fn total(&self) -> FloatMajorUnit {
+        self.total
+    }
+
+    pub fn currency(&self) -> &String {
+        &self.currency
+    }
+}
+
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct AmountComponents {
@@ -282,6 +292,11 @@ impl AuthipayPaymentsResponse {
             approved_amount: self.approved_amount.clone(),
             processor_response_details: Some(self.processor.clone()),
         }
+    }
+
+    /// Get approved amount for integrity checks
+    pub fn approved_amount(&self) -> &Amount {
+        &self.approved_amount
     }
 
     /// Determine the transaction status based on transaction type and various status fields (like Fiserv)
